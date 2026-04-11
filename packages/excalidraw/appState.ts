@@ -131,6 +131,7 @@ export const getDefaultAppState = (): Omit<
     boxSelectionMode: "contain",
     isometricView: false,
     isometricAngle: 0,
+    isometricFloorHeight: 220,
     floorFilterFrameId: null,
   };
 };
@@ -261,6 +262,7 @@ const APP_STATE_STORAGE_CONF = (<
   bindMode: { browser: true, export: false, server: false },
   isometricView: { browser: true, export: false, server: false },
   isometricAngle: { browser: true, export: false, server: false },
+  isometricFloorHeight: { browser: true, export: false, server: false },
   floorFilterFrameId: { browser: true, export: false, server: false },
 });
 

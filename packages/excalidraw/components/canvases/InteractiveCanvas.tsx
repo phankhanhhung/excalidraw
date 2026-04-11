@@ -272,6 +272,7 @@ const getRelevantAppStateProps = (
   currentItemArrowType: appState.currentItemArrowType,
   isometricView: appState.isometricView,
   isometricAngle: appState.isometricAngle,
+  isometricFloorHeight: appState.isometricFloorHeight,
   floorFilterFrameId: appState.floorFilterFrameId,
 });
 
