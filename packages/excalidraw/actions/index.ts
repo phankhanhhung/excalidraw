@@ -94,4 +94,5 @@ export { actionToggleSearchMenu } from "./actionToggleSearchMenu";
 export { actionToggleCropEditor } from "./actionCropEditor";
 
 export { actionToggleIsometricView } from "./actionToggleIsometric";
+export { actionRotateIsometric } from "./actionRotateIsometric";
 export { actionSetFloorFilter } from "./actionSetFloorFilter";

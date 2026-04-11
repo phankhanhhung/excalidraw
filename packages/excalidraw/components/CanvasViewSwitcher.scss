@@ -157,5 +157,41 @@
         }
       }
     }
+
+    &__rotate {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.15rem;
+    }
+
+    &__rotate-btn,
+    &__rotate-angle {
+      appearance: none;
+      background: transparent;
+      border: none;
+      color: var(--text-primary-color);
+      font: inherit;
+      cursor: pointer;
+      padding: 0.2rem 0.45rem;
+      min-width: 1.6rem;
+      border-radius: var(--border-radius-md, 6px);
+      line-height: 1;
+
+      &:hover {
+        background: var(--button-hover-bg, rgba(0, 0, 0, 0.06));
+      }
+    }
+
+    &__rotate-btn {
+      font-size: 1rem;
+    }
+
+    &__rotate-angle {
+      font-size: 0.7rem;
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      min-width: 2.2rem;
+      text-align: center;
+    }
   }
 }

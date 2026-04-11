@@ -101,6 +101,7 @@ const getRelevantAppStateProps = (appState: AppState): StaticCanvasAppState => {
     croppingElementId: appState.croppingElementId,
     suggestedBinding: appState.suggestedBinding,
     isometricView: appState.isometricView,
+    isometricAngle: appState.isometricAngle,
     floorFilterFrameId: appState.floorFilterFrameId,
   };
 

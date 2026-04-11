@@ -8,8 +8,11 @@ import type {
   ExcalidrawFrameLikeElement,
 } from "@excalidraw/element/types";
 
+import { actionRotateIsometric } from "../actions/actionRotateIsometric";
 import { actionSetFloorFilter } from "../actions/actionSetFloorFilter";
 import { actionToggleIsometricView } from "../actions/actionToggleIsometric";
+
+const ROTATE_STEP = Math.PI / 12; // 15° per click
 
 import { Island } from "./Island";
 
@@ -72,7 +75,18 @@ export const CanvasViewSwitcher = ({
     actionManager.executeAction(actionToggleIsometricView);
   }, [actionManager]);
 
+  const handleRotate = useCallback(
+    (delta: number | null) => {
+      actionManager.executeAction(actionRotateIsometric, "ui", delta);
+    },
+    [actionManager],
+  );
+
   const floorLabel = activeFloor?.name || "All floors";
+
+  // Normalize to a nice 0–359° display value
+  const angleDeg =
+    Math.round(((appState.isometricAngle || 0) * 180) / Math.PI + 360) % 360;
 
   return (
     <Island className="CanvasViewSwitcher" padding={1}>
@@ -151,6 +165,44 @@ export const CanvasViewSwitcher = ({
         </span>
         <span className="CanvasViewSwitcher__toggle-label">3D</span>
       </label>
+      {appState.isometricView && (
+        <>
+          <div className="CanvasViewSwitcher__divider" aria-hidden="true" />
+          <div
+            className="CanvasViewSwitcher__rotate"
+            role="group"
+            aria-label="Rotate isometric view"
+          >
+            <button
+              type="button"
+              className="CanvasViewSwitcher__rotate-btn"
+              onClick={() => handleRotate(-ROTATE_STEP)}
+              title="Rotate 15° counter-clockwise"
+              aria-label="Rotate counter-clockwise"
+            >
+              ⟲
+            </button>
+            <button
+              type="button"
+              className="CanvasViewSwitcher__rotate-angle"
+              onClick={() => handleRotate(null)}
+              title="Reset angle to 0°"
+              aria-label="Reset rotation"
+            >
+              {angleDeg}°
+            </button>
+            <button
+              type="button"
+              className="CanvasViewSwitcher__rotate-btn"
+              onClick={() => handleRotate(ROTATE_STEP)}
+              title="Rotate 15° clockwise"
+              aria-label="Rotate clockwise"
+            >
+              ⟳
+            </button>
+          </div>
+        </>
+      )}
     </Island>
   );
 };

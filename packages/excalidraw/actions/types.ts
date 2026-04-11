@@ -117,6 +117,7 @@ export type ActionName =
   | "deselect"
   | "viewMode"
   | "isometricView"
+  | "rotateIsometric"
   | "setFloorFilter"
   | "exportWithDarkMode"
   | "toggleTheme"

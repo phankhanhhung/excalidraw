@@ -274,9 +274,15 @@ const _renderStaticScene = ({
 
   // Isometric view: apply a pseudo-3D projection matrix on top of the
   // zoom. We transform around the viewport center so the scene stays
-  // anchored visually. The mode is read-only (pointer events are
-  // disabled in App.tsx) so inverse-mapping of cursor coordinates is
-  // intentionally not handled.
+  // anchored visually. A yaw rotation (`isometricAngle`) is applied
+  // BEFORE the dimetric projection, which lets the user rotate the
+  // camera around the vertical axis to reveal geometry from different
+  // sides. The mode is read-only (pointer events are disabled in
+  // App.tsx) so inverse-mapping of cursor coordinates is intentionally
+  // not handled.
+  //
+  // Final transform applied to a world point P:
+  //   screen = scale(zoom) · T(+center) · I_dimetric · R(yaw) · T(-center) · P
   if (appState.isometricView) {
     const centerX = normalizedWidth / appState.zoom.value / 2;
     const centerY = normalizedHeight / appState.zoom.value / 2;
@@ -285,6 +291,9 @@ const _renderStaticScene = ({
     const sin30 = 0.5;
     context.translate(centerX, centerY);
     context.transform(cos30, sin30, -cos30, sin30, 0, 0);
+    if (appState.isometricAngle) {
+      context.rotate(appState.isometricAngle);
+    }
     context.translate(-centerX, -centerY);
   }
 

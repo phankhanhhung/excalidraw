@@ -271,6 +271,7 @@ const getRelevantAppStateProps = (
   exportScale: appState.exportScale,
   currentItemArrowType: appState.currentItemArrowType,
   isometricView: appState.isometricView,
+  isometricAngle: appState.isometricAngle,
   floorFilterFrameId: appState.floorFilterFrameId,
 });
 
