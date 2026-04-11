@@ -8,6 +8,7 @@ import { calculateScrollCenter } from "../scene";
 import { SCROLLBAR_WIDTH, SCROLLBAR_MARGIN } from "../scene/scrollbars";
 
 import { ExitViewModeButton, MobileShapeActions } from "./Actions";
+import { CanvasViewSwitcher } from "./CanvasViewSwitcher";
 import { MobileToolBar } from "./MobileToolBar";
 import { FixedSideContainer } from "./FixedSideContainer";
 
@@ -175,6 +176,17 @@ export const MobileMenu = ({
       <FixedSideContainer side="top" className="App-top-bar">
         {renderAppTopBar()}
       </FixedSideContainer>
+
+      {/* Canvas view switcher (floors + 3D) — on mobile we park it in
+          its own row below the top bar because the top-right slot is
+          crowded. */}
+      <div className="CanvasViewSwitcher__mobile-anchor">
+        <CanvasViewSwitcher
+          appState={appState}
+          elements={elements}
+          actionManager={actionManager}
+        />
+      </div>
     </>
   );
 };
