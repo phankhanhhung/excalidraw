@@ -8,6 +8,7 @@ import type {
   ExcalidrawFrameLikeElement,
 } from "@excalidraw/element/types";
 
+import { actionLoadFloorsDemo } from "../actions/actionLoadFloorsDemo";
 import { actionRotateIsometric } from "../actions/actionRotateIsometric";
 import { actionSetFloorFilter } from "../actions/actionSetFloorFilter";
 import { actionToggleIsometricView } from "../actions/actionToggleIsometric";
@@ -82,6 +83,10 @@ export const CanvasViewSwitcher = ({
     [actionManager],
   );
 
+  const handleLoadDemo = useCallback(() => {
+    actionManager.executeAction(actionLoadFloorsDemo);
+  }, [actionManager]);
+
   const floorLabel = activeFloor?.name || "All floors";
 
   // Normalize to a nice 0–359° display value
@@ -90,6 +95,15 @@ export const CanvasViewSwitcher = ({
 
   return (
     <Island className="CanvasViewSwitcher" padding={1}>
+      <button
+        type="button"
+        className="CanvasViewSwitcher__demo"
+        onClick={handleLoadDemo}
+        title="Load a real-estate multi-floor demo scene"
+      >
+        Load demo
+      </button>
+      <div className="CanvasViewSwitcher__divider" aria-hidden="true" />
       <div className="CanvasViewSwitcher__floor">
         <button
           type="button"

@@ -8,6 +8,24 @@
     pointer-events: auto;
     user-select: none;
 
+    &__demo {
+      appearance: none;
+      background: var(--color-primary, #6965db);
+      color: #fff;
+      border: none;
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.7rem;
+      padding: 0.35rem 0.6rem;
+      border-radius: var(--border-radius-md, 6px);
+      cursor: pointer;
+      letter-spacing: 0.02em;
+
+      &:hover {
+        filter: brightness(1.08);
+      }
+    }
+
     &__floor {
       position: relative;
       display: flex;

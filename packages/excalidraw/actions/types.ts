@@ -119,6 +119,7 @@ export type ActionName =
   | "isometricView"
   | "rotateIsometric"
   | "setFloorFilter"
+  | "loadFloorsDemo"
   | "exportWithDarkMode"
   | "toggleTheme"
   | "increaseFontSize"
