@@ -1,15 +1,24 @@
 .excalidraw {
   // Mobile-only wrapper that positions the switcher below the top bar
   // (the mobile top bar is rendered inside `.App-top-bar` which sits
-  // absolutely at the top of the screen).
+  // absolutely at the top of the screen). Must sit above the
+  // interactive canvas (z=2) and the main UI layer (z=4), so we lift
+  // it to the same stack level as other top UI controls.
   .CanvasViewSwitcher__mobile-anchor {
     position: fixed;
-    top: 3.75rem;
+    top: 4.5rem;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 2;
-    pointer-events: auto;
+    z-index: var(--zIndex-ui-top, 100);
+    pointer-events: auto !important;
     max-width: calc(100vw - 1rem);
+
+    // force all descendants to accept pointer events — the global
+    // .layer-ui__wrapper rule sets pointer-events:none at several
+    // levels which would otherwise swallow taps on our buttons.
+    * {
+      pointer-events: auto !important;
+    }
   }
 
   .CanvasViewSwitcher {
