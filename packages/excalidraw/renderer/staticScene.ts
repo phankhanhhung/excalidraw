@@ -252,6 +252,38 @@ const _renderStaticScene = ({
       )
     : visibleElementsInput;
 
+  // Build a map of frame id → { index, baseOffset } used by isometric
+  // view to stack the frames like the floors of a building. Each
+  // frame is re-centered on the position of the first frame so the
+  // floors line up vertically in world space, then elevated by
+  // `index × isometricFloorHeight` world units — under the dimetric
+  // projection this translates to the floors visually stacking on
+  // top of each other in screen space.
+  type FloorTransform = { dx: number; dy: number };
+  const floorTransformByFrameId = new Map<string, FloorTransform>();
+  if (appState.isometricView && appState.isometricFloorHeight > 0) {
+    const frames = visibleElements.filter(
+      (el) => el.type === "frame" || el.type === "magicframe",
+    );
+    if (frames.length > 1) {
+      const base = frames[0];
+      const H = appState.isometricFloorHeight;
+      frames.forEach((f, idx) => {
+        floorTransformByFrameId.set(f.id, {
+          dx: base.x - f.x - idx * H,
+          dy: base.y - f.y - idx * H,
+        });
+      });
+    }
+  }
+  const getFloorTransform = (
+    element: NonDeletedExcalidrawElement,
+  ): FloorTransform | undefined =>
+    floorTransformByFrameId.get(element.id) ??
+    (element.frameId
+      ? floorTransformByFrameId.get(element.frameId)
+      : undefined);
+
   const { renderGrid = true, isExporting } = renderConfig;
 
   const [normalizedWidth, normalizedHeight] = getNormalizedCanvasDimensions(
@@ -351,6 +383,13 @@ const _renderStaticScene = ({
         }
 
         context.save();
+
+        // Isometric "stacked floors": elevate elements inside each
+        // frame by (idx × H) so the floors visually stack.
+        const floorT = getFloorTransform(element);
+        if (floorT) {
+          context.translate(floorT.dx, floorT.dy);
+        }
 
         if (
           frameId &&
@@ -466,12 +505,19 @@ const _renderStaticScene = ({
         //   if the containing frame is not selected, apply clipping
         const frameId = element.frameId || appState.frameToHighlight?.id;
 
+        // Isometric "stacked floors": embeddables inside frames also
+        // need the per-floor elevation applied.
+        const floorT = getFloorTransform(element);
+
         if (
           frameId &&
           appState.frameRendering.enabled &&
           appState.frameRendering.clip
         ) {
           context.save();
+          if (floorT) {
+            context.translate(floorT.dx, floorT.dy);
+          }
 
           const frame = getTargetFrame(element, elementsMap, appState);
 
@@ -487,6 +533,11 @@ const _renderStaticScene = ({
           ) {
             frameClip(frame, context, renderConfig, appState);
           }
+          render();
+          context.restore();
+        } else if (floorT) {
+          context.save();
+          context.translate(floorT.dx, floorT.dy);
           render();
           context.restore();
         } else {

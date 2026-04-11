@@ -196,6 +196,8 @@ type _CommonCanvasAppState = {
   isometricView: AppState["isometricView"];
   // yaw rotation applied before the dimetric projection
   isometricAngle: AppState["isometricAngle"];
+  // vertical separation between stacked floors in isometric view
+  isometricFloorHeight: AppState["isometricFloorHeight"];
   // restricts rendering to elements inside a given frame ("floor")
   floorFilterFrameId: AppState["floorFilterFrameId"];
 };
@@ -491,6 +493,14 @@ export interface AppState {
    * the viewing angle to reveal geometry from a different side.
    */
   isometricAngle: number;
+  /**
+   * World-units of vertical separation between consecutive floors
+   * (frames) when `isometricView` is enabled. Each frame (in scene
+   * order) gets re-centered on the first frame's origin and then
+   * elevated by `N × isometricFloorHeight` units so the floors stack
+   * vertically in screen space like the floors of a real building.
+   */
+  isometricFloorHeight: number;
   /**
    * When set, only elements belonging to the frame with this id are
    * rendered. Used to let the user focus on a single "floor" (frame)
