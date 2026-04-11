@@ -116,6 +116,8 @@ export type ActionName =
   | "flipVertical"
   | "deselect"
   | "viewMode"
+  | "isometricView"
+  | "setFloorFilter"
   | "exportWithDarkMode"
   | "toggleTheme"
   | "increaseFontSize"

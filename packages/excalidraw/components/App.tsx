@@ -7480,6 +7480,13 @@ class App extends React.Component<AppProps, AppState> {
   private handleCanvasPointerDown = (
     event: React.PointerEvent<HTMLElement>,
   ) => {
+    // Isometric view is a read-only preview: don't process pointer
+    // interactions on the canvas. The user can still use keyboard
+    // shortcuts (e.g. Alt+I to toggle back) and UI buttons.
+    if (this.state.isometricView) {
+      return;
+    }
+
     const selectedElements = this.scene.getSelectedElements(this.state);
 
     // If Ctrl is not held, ensure isBindingEnabled reflects the user preference.

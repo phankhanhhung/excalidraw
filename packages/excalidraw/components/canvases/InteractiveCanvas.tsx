@@ -270,6 +270,8 @@ const getRelevantAppStateProps = (
   shouldCacheIgnoreZoom: appState.shouldCacheIgnoreZoom,
   exportScale: appState.exportScale,
   currentItemArrowType: appState.currentItemArrowType,
+  isometricView: appState.isometricView,
+  floorFilterFrameId: appState.floorFilterFrameId,
 });
 
 const areEqual = (

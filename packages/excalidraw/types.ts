@@ -192,6 +192,10 @@ type _CommonCanvasAppState = {
   offsetLeft: AppState["offsetLeft"];
   offsetTop: AppState["offsetTop"];
   theme: AppState["theme"];
+  // pseudo-3D isometric preview of the canvas (read-only view)
+  isometricView: AppState["isometricView"];
+  // restricts rendering to elements inside a given frame ("floor")
+  floorFilterFrameId: AppState["floorFilterFrameId"];
 };
 
 export type StaticCanvasAppState = Readonly<
@@ -473,6 +477,18 @@ export interface AppState {
   // and also remove groupId from this map
   lockedMultiSelections: { [groupId: string]: true };
   bindMode: BindMode;
+  /**
+   * When enabled, the canvas is rendered with a pseudo-3D isometric
+   * projection to give a sense of height/volume. Acts as a read-only
+   * "preview" mode — pointer interactions are disabled while active.
+   */
+  isometricView: boolean;
+  /**
+   * When set, only elements belonging to the frame with this id are
+   * rendered. Used to let the user focus on a single "floor" (frame)
+   * when working on multi-level floor plans. `null` means show all.
+   */
+  floorFilterFrameId: string | null;
 }
 
 export type SearchMatch = {
