@@ -1553,7 +1553,7 @@ const _renderInteractiveScene = ({
   app,
   canvas,
   elementsMap,
-  visibleElements,
+  visibleElements: visibleElementsInput,
   selectedElements,
   allElementsMap,
   scale,
@@ -1584,6 +1584,30 @@ const _renderInteractiveScene = ({
     normalizedWidth,
     normalizedHeight,
   });
+
+  // Isometric view is read-only: clear and skip drawing any of the
+  // interactive overlays (selection handles, link handles, binding
+  // highlights, snap lines, linear point handles, etc.). The static
+  // scene still renders the canvas content with the isometric
+  // projection applied.
+  if (appState.isometricView) {
+    context.clearRect(0, 0, normalizedWidth, normalizedHeight);
+    return {
+      atLeastOneVisibleElement: visibleElementsInput.length > 0,
+      elementsMap,
+    };
+  }
+
+  // Floor filter: restrict interactive rendering to the active floor
+  // (frame). Elements outside the selected floor are static-only and
+  // should not receive selection handles or binding highlights.
+  const visibleElements = appState.floorFilterFrameId
+    ? visibleElementsInput.filter(
+        (el) =>
+          el.id === appState.floorFilterFrameId ||
+          el.frameId === appState.floorFilterFrameId,
+      )
+    : visibleElementsInput;
 
   // Apply zoom
   context.save();

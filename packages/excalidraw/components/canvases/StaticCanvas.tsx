@@ -100,6 +100,9 @@ const getRelevantAppStateProps = (appState: AppState): StaticCanvasAppState => {
     currentHoveredFontFamily: appState.currentHoveredFontFamily,
     croppingElementId: appState.croppingElementId,
     suggestedBinding: appState.suggestedBinding,
+    isometricView: appState.isometricView,
+    isometricAngle: appState.isometricAngle,
+    floorFilterFrameId: appState.floorFilterFrameId,
   };
 
   return relevantAppStateProps;

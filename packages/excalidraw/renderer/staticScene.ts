@@ -231,7 +231,7 @@ const _renderStaticScene = ({
   rc,
   elementsMap,
   allElementsMap,
-  visibleElements,
+  visibleElements: visibleElementsInput,
   scale,
   appState,
   renderConfig,
@@ -239,6 +239,18 @@ const _renderStaticScene = ({
   if (canvas === null) {
     return;
   }
+
+  // Apply "floor filter": when a specific frame is selected as the
+  // active floor, only elements belonging to that frame (or the frame
+  // element itself) are rendered. This lets users isolate one level
+  // of a multi-floor plan without deleting or hiding elements.
+  const visibleElements = appState.floorFilterFrameId
+    ? visibleElementsInput.filter(
+        (el) =>
+          el.id === appState.floorFilterFrameId ||
+          el.frameId === appState.floorFilterFrameId,
+      )
+    : visibleElementsInput;
 
   const { renderGrid = true, isExporting } = renderConfig;
 
@@ -259,6 +271,31 @@ const _renderStaticScene = ({
 
   // Apply zoom
   context.scale(appState.zoom.value, appState.zoom.value);
+
+  // Isometric view: apply a pseudo-3D projection matrix on top of the
+  // zoom. We transform around the viewport center so the scene stays
+  // anchored visually. A yaw rotation (`isometricAngle`) is applied
+  // BEFORE the dimetric projection, which lets the user rotate the
+  // camera around the vertical axis to reveal geometry from different
+  // sides. The mode is read-only (pointer events are disabled in
+  // App.tsx) so inverse-mapping of cursor coordinates is intentionally
+  // not handled.
+  //
+  // Final transform applied to a world point P:
+  //   screen = scale(zoom) · T(+center) · I_dimetric · R(yaw) · T(-center) · P
+  if (appState.isometricView) {
+    const centerX = normalizedWidth / appState.zoom.value / 2;
+    const centerY = normalizedHeight / appState.zoom.value / 2;
+    // classic dimetric transform: cos30/sin30 on X, sin30 on Y
+    const cos30 = Math.cos(Math.PI / 6); // ≈ 0.866
+    const sin30 = 0.5;
+    context.translate(centerX, centerY);
+    context.transform(cos30, sin30, -cos30, sin30, 0, 0);
+    if (appState.isometricAngle) {
+      context.rotate(appState.isometricAngle);
+    }
+    context.translate(-centerX, -centerY);
+  }
 
   // Grid
   if (renderGrid) {

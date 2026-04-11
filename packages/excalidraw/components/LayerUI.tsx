@@ -45,6 +45,7 @@ import { isSidebarDockedAtom } from "./Sidebar/Sidebar";
 import MainMenu from "./main-menu/MainMenu";
 import { ActiveConfirmDialog } from "./ActiveConfirmDialog";
 import { useEditorInterface, useStylesPanelMode } from "./App";
+import { CanvasViewSwitcher } from "./CanvasViewSwitcher";
 import { OverwriteConfirmDialog } from "./OverwriteConfirm/OverwriteConfirm";
 import { sidebarRightIcon } from "./icons";
 import { DefaultSidebar } from "./DefaultSidebar";
@@ -407,6 +408,11 @@ const LayerUI = ({
                 userToFollow={appState.userToFollow?.socketId || null}
               />
             )}
+            <CanvasViewSwitcher
+              appState={appState}
+              elements={elements}
+              actionManager={actionManager}
+            />
             {renderTopRightUI?.(
               editorInterface.formFactor === "phone",
               appState,
