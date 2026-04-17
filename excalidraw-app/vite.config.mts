@@ -1,6 +1,7 @@
 import path from "path";
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
+import { svelte } from "@sveltejs/vite-plugin-svelte";
 import svgrPlugin from "vite-plugin-svgr";
 import { ViteEjsPlugin } from "vite-plugin-ejs";
 import { VitePWA } from "vite-plugin-pwa";
@@ -126,6 +127,7 @@ export default defineConfig(({ mode }) => {
         generateRobotsTxt: false,
       }),
       woff2BrowserPlugin(),
+      svelte(),
       react(),
       checker({
         typescript: true,

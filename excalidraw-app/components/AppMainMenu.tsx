@@ -4,6 +4,7 @@ import {
   eyeIcon,
 } from "@excalidraw/excalidraw/components/icons";
 import { MainMenu } from "@excalidraw/excalidraw/index";
+import { useExcalidrawAPI } from "@excalidraw/excalidraw";
 import React from "react";
 
 import { isDevEnv } from "@excalidraw/common";
@@ -14,6 +15,72 @@ import { LanguageList } from "../app-language/LanguageList";
 import { isExcalidrawPlusSignedUser } from "../app_constants";
 
 import { saveDebugState } from "./DebugCanvas";
+
+const quizMenuIcon = (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    viewBox="0 0 24 24"
+    width="16"
+    height="16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+    <line x1="12" y1="17" x2="12.01" y2="17" />
+  </svg>
+);
+
+const svelteQuizMenuIcon = (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    viewBox="0 0 24 24"
+    width="16"
+    height="16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="M8 12h8" />
+    <path d="M12 8v8" />
+  </svg>
+);
+
+const QuizMenuItems = () => {
+  const api = useExcalidrawAPI();
+  return (
+    <>
+      <MainMenu.Item
+        icon={quizMenuIcon}
+        onSelect={() => {
+          api?.updateScene({
+            appState: { openSidebar: { name: "default", tab: "quiz" } },
+          });
+        }}
+      >
+        Quiz Excalidraw
+      </MainMenu.Item>
+      <MainMenu.Item
+        icon={svelteQuizMenuIcon}
+        onSelect={() => {
+          api?.updateScene({
+            appState: { openSidebar: { name: "default", tab: "svelte-quiz" } },
+          });
+        }}
+      >
+        Quiz Svelte (Màu Sắc)
+      </MainMenu.Item>
+    </>
+  );
+};
 
 export const AppMainMenu: React.FC<{
   onCollabDialogOpen: () => any;
@@ -76,6 +143,8 @@ export const AppMainMenu: React.FC<{
           Visual Debug
         </MainMenu.Item>
       )}
+      <MainMenu.Separator />
+      <QuizMenuItems />
       <MainMenu.Separator />
       <MainMenu.DefaultItems.Preferences />
       <MainMenu.DefaultItems.ToggleTheme
