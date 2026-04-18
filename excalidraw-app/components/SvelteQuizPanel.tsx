@@ -8,9 +8,10 @@ export const SvelteQuizPanel = () => {
       return;
     }
     let component: { $destroy(): void } | undefined;
+    let mounted = true;
 
     import("./SvelteQuiz.svelte").then(({ default: SvelteQuiz }) => {
-      if (containerRef.current) {
+      if (mounted && containerRef.current) {
         component = new (SvelteQuiz as any)({
           target: containerRef.current,
           props: {},
@@ -19,6 +20,7 @@ export const SvelteQuizPanel = () => {
     });
 
     return () => {
+      mounted = false;
       component?.$destroy();
     };
   }, []);
